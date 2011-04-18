@@ -1,0 +1,4 @@
+Premain-Class: com.agapple.tracer4java.dump.instrument.ClassDumperAgent
+Agent-Class: com.agapple.tracer4java.dump.instrument.ClassDumperAgent
+Can-Redefine-Classes: true
+Can-Retransform-Classes: true
