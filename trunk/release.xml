@@ -15,6 +15,10 @@
 			<outputDirectory>bin</outputDirectory>
 			<fileMode>0755</fileMode>
 		</fileSet>
+		<fileSet>
+			<directory>lib</directory>
+			<outputDirectory>lib</outputDirectory>
+		</fileSet>
 	</fileSets>
 	<dependencySets>
 		<dependencySet>
