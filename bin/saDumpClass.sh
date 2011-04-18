@@ -10,11 +10,11 @@ EOF
  exit 1
 fi
 
-BASE=`basename "$0"`
+. `dirname $0`/base_fun.sh
 DUMPFILTER="com.agapple.tracer4java.dump.sa.DumpFilter"
 
 DUMPDIR=$1
 PID=$2
 DUMPCLASSES=$3
 
-${JAVA_HOME}/bin/java -classpath "$BASE/lib:." -DdumpClasses=$DUMPCLASSES -Dsun.jvm.hotspot.tools.jcore.filter=$DUMPFILTER -Dsun.jvm.hotspot.tools.jcore.outputDir=$DUMPDIR sun.jvm.hotspot.tools.jcore.ClassDump $PID
+${JAVA_HOME}/bin/java -classpath $CLASSPATH -DdumpClasses=$DUMPCLASSES -Dsun.jvm.hotspot.tools.jcore.filter=$DUMPFILTER -Dsun.jvm.hotspot.tools.jcore.outputDir=$DUMPDIR sun.jvm.hotspot.tools.jcore.ClassDump $PID

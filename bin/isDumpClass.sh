@@ -10,11 +10,12 @@ EOF
  exit 1
 fi
 
-BASE=`basename "$0"`
+. `dirname $0`/base_fun.sh
 ATTACHER="com.agapple.tracer4java.dump.instrument.Attacher"
+AGENT="$BASE/lib/tracer4java-1.0.0.jar"
 
 DUMPDIR=$1
 PID=$2
 DUMPCLASSES=$3
 
-${JAVA_HOME}/bin/java -classpath "$BASE/lib:." $ATTACHER $PID $BASE/lib/tracer4java-1.0.0-SNAPSHOT.jar dumpDir=$DUMPDIR,dumpClasses=$DUMPCLASSES
+${JAVA_HOME}/bin/java -classpath $CLASSPATH $ATTACHER $PID $AGENT dumpDir=$DUMPDIR,dumpClasses=$DUMPCLASSES

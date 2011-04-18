@@ -1,47 +1,20 @@
 #! /bin/sh
 
-if [ -z "$BTRACE_HOME" -o ! -d "$BTRACE_HOME" ] ; then
-  # resolve links - $0 could be a link to btrace's home
-  PRG="$0"
-  progname=`basename "$0"`
-  BTRACE_HOME=`dirname "$PRG"`/..
-  BTRACE_HOME=`cd "$BTRACE_HOME" && pwd`
+if [ "$1" = "-h" ] || [ "$1" = "-v" ]; then
+   cat << EOF >&2
+   Useage: $0 [probe $path|debug] [-p port] [-I includePath]
+EOF
+ exit 1
 fi
 
-if [ -f "${BTRACE_HOME}/build/btrace-client.jar" ] ; then
-    if [ "${JAVA_HOME}" != "" ]; then
-       case "`uname`" in
-          Darwin*)
-              # In Mac OS X, tools.jar is classes.jar and is kept in a 
-              # different location. Check if we can locate classes.jar
-              # based on ${JAVA_VERSION}
-              TOOLS_JAR="/System/Library/Frameworks/JavaVM.framework/Versions/${JAVA_VERSION}/Classes/classes.jar"
+. `dirname $0`/base_fun.sh
+CLASSPATH=$CLASSPATH:/usr/share/lib/java/dtrace.jar
 
-              # if we can't find, try relative path from ${JAVA_HOME}. Usually,
-              # /System/Library/Frameworks/JavaVM.framework/Versions/1.6.0/Home
-              # is JAVA_HOME. (or whatever version beyond 1.6.0!)
-              if [ ! -f ${TOOLS_JAR} ] ; then
-                  TOOLS_JAR="${JAVA_HOME}/../Classes/classes.jar" 
-              fi
+DEBUG=false
+TRACK_RETRANSFORM=false
+UNSAFE=true
+DUMP_CLASSES=false
+DUMP_DIR="."
+PROBE_DESC_PATH="."
 
-              # If we still can't find, tell the user to set JAVA_VERSION.
-              # This way, we can avoid zip file errors from the agent side
-              # and "connection refused" message from client.
-              if [ ! -f ${TOOLS_JAR} ] ; then
-                  echo "Please set JAVA_VERSION to the target java version"
-                  exit 1
-              fi
-          ;;
-          *)
-              TOOLS_JAR="${JAVA_HOME}/lib/tools.jar"
-          ;;
-       esac
-       ${JAVA_HOME}/bin/java -Dcom.sun.btrace.probeDescPath=. -Dcom.sun.btrace.dumpClasses=false -Dcom.sun.btrace.debug=false -Dcom.sun.btrace.unsafe=false -cp ${BTRACE_HOME}/build/btrace-client.jar:${TOOLS_JAR}:/usr/share/lib/java/dtrace.jar com.sun.btrace.client.Main $*
-    else
-       echo "Please set JAVA_HOME before running this script"
-       exit 1
-    fi
-else
-    echo "Please set BTRACE_HOME before running this script"
-    exit 1
-fi
+${JAVA_HOME}/bin/java -Dcom.sun.btrace.probeDescPath=$PROBE_DESC_PATH -Dcom.sun.btrace.dumpClasses=$DUMP_CLASSES -Dcom.sun.btrace.dumpDir=$DUMP_DIR -Dcom.sun.btrace.debug=$DEBUG -Dcom.sun.btrace.unsafe=$UNSAFE -Dcom.sun.btrace.trackRetransforms=$TRACK_RETRANSFORM -cp $CLASSPATH com.sun.btrace.client.Main $*
