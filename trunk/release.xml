@@ -1,0 +1,24 @@
+<assembly>
+	<id>dist</id>
+	<outputDirectory>${project.basedir}/dist</outputDirectory>
+	<formats>
+		<format>tar.gz</format>
+		<!-- 
+		<format>tar.bz2</format>
+    	<format>zip</format>
+    	 -->
+	</formats>
+	<includeBaseDirectory>false</includeBaseDirectory>
+	<fileSets>
+		<fileSet>
+			<directory>bin</directory>
+			<outputDirectory>bin</outputDirectory>
+			<fileMode>0755</fileMode>
+		</fileSet>
+	</fileSets>
+	<dependencySets>
+		<dependencySet>
+			<outputDirectory>lib</outputDirectory>
+		</dependencySet>
+	</dependencySets>
+</assembly>
